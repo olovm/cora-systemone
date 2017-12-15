@@ -34,6 +34,7 @@
 		<gatekeeperclient.version>0.4-SNAPSHOT</gatekeeperclient.version>
 		<metacreator.version>0.1-SNAPSHOT</metacreator.version>
 		<solrsearch.version>0.1-SNAPSHOT</solrsearch.version>
+		<sqlstorage.version>0.1-SNAPSHOT</sqlstorage.version>
 	</properties>
 
 	<scm>
@@ -104,6 +105,11 @@
 			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>solrsearch</artifactId>
 			<version>${solrsearch.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>se.uu.ub.cora</groupId>
+			<artifactId>sqlstorage</artifactId>
+			<version>${sqlstorage.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
