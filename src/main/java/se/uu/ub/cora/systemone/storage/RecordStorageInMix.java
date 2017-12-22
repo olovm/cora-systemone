@@ -41,71 +41,65 @@ public class RecordStorageInMix implements RecordStorage {
 
 	@Override
 	public DataGroup read(String type, String id) {
-		// TODO Auto-generated method stub
-		return null;
+		if (type.equals("book")) {
+			recordStorageInDatabase.read(type, id);
+		}
+		return recordStorageOnDisk.read(type, id);
 	}
 
 	@Override
 	public void create(String type, String id, DataGroup record, DataGroup linkList,
 			String dataDivider) {
-		// TODO Auto-generated method stub
-
+		recordStorageOnDisk.create(type, id, record, linkList, dataDivider);
 	}
 
 	@Override
 	public void deleteByTypeAndId(String type, String id) {
-		// TODO Auto-generated method stub
-
+		recordStorageOnDisk.deleteByTypeAndId(type, id);
 	}
 
 	@Override
 	public boolean linksExistForRecord(String type, String id) {
-		// TODO Auto-generated method stub
-		return false;
+		return recordStorageOnDisk.linksExistForRecord(type, id);
 	}
 
 	@Override
 	public void update(String type, String id, DataGroup record, DataGroup linkList,
 			String dataDivider) {
-		// TODO Auto-generated method stub
-
+		recordStorageOnDisk.update(type, id, record, linkList, dataDivider);
+		recordStorageInDatabase.update(type, id, record, linkList, dataDivider);
 	}
 
 	@Override
 	public Collection<DataGroup> readList(String type) {
-		// TODO Auto-generated method stub
-		return null;
+		return recordStorageOnDisk.readList(type);
 	}
 
 	@Override
 	public Collection<DataGroup> readAbstractList(String type) {
-		// TODO Auto-generated method stub
-		return null;
+		return recordStorageOnDisk.readAbstractList(type);
 	}
 
 	@Override
 	public DataGroup readLinkList(String type, String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return recordStorageOnDisk.readLinkList(type, id);
 	}
 
 	@Override
 	public Collection<DataGroup> generateLinkCollectionPointingToRecord(String type, String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return recordStorageOnDisk.generateLinkCollectionPointingToRecord(type, id);
 	}
 
 	@Override
 	public boolean recordsExistForRecordType(String type) {
-		// TODO Auto-generated method stub
-		return false;
+		return recordStorageOnDisk.recordsExistForRecordType(type);
 	}
 
 	@Override
 	public boolean recordExistsForAbstractOrImplementingRecordTypeAndRecordId(String type,
 			String id) {
-		// TODO Auto-generated method stub
-		return false;
+		return recordStorageOnDisk.recordExistsForAbstractOrImplementingRecordTypeAndRecordId(type,
+				id);
 	}
 
 	public RecordStorage getRecordStorageInDatabase() {

@@ -20,17 +20,26 @@ package se.uu.ub.cora.systemone.storage;
 
 import static org.testng.Assert.assertEquals;
 
+import java.util.Collection;
+
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class RecordStorageInMixTest {
-	// private RecordStorageInDatabase recordStorageInDatabase = new
-	// RecordStorageInDatabaseSpy();
-	// private RecordStorageOnDisk recordStorageOnDisk = new
-	// RecordStorageOnDiskSpy();
-	private RecordStorage recordStorageInDatabase = new RecordStorageSystemTwoSpy();
-	private RecordStorage recordStorageOnDisk = new RecordStorageSystemTwoSpy();
+	private RecordStorageSystemTwoSpy recordStorageInDatabase = new RecordStorageSystemTwoSpy();
+	private RecordStorageSystemTwoSpy recordStorageOnDisk = new RecordStorageSystemTwoSpy();
+	private RecordStorageInMix recordStorageMix;
+
+	@BeforeMethod
+	public void beforeMethod() {
+		recordStorageInDatabase = new RecordStorageSystemTwoSpy();
+		recordStorageOnDisk = new RecordStorageSystemTwoSpy();
+		recordStorageMix = RecordStorageInMix.usingDatabaseAndDiskStorage(recordStorageInDatabase,
+				recordStorageOnDisk);
+	}
 
 	@Test
 	public void testImplementsRecordStorage() {
@@ -41,9 +50,108 @@ public class RecordStorageInMixTest {
 
 	@Test
 	public void testGetStorages() {
-		RecordStorageInMix r = RecordStorageInMix
-				.usingDatabaseAndDiskStorage(recordStorageInDatabase, recordStorageOnDisk);
-		assertEquals(r.getRecordStorageInDatabase(), recordStorageInDatabase);
-		assertEquals(r.getRecordStorageOnDisk(), recordStorageOnDisk);
+		assertEquals(recordStorageMix.getRecordStorageInDatabase(), recordStorageInDatabase);
+		assertEquals(recordStorageMix.getRecordStorageOnDisk(), recordStorageOnDisk);
+	}
+
+	@Test
+	public void testReadIsPassedOnToOnDiskStorage() throws Exception {
+		DataGroup readRecord = recordStorageMix.read("someType", "someId");
+		assertEquals(recordStorageOnDisk.type, "someType");
+		assertEquals(recordStorageOnDisk.id, "someId");
+		assertEquals(readRecord, recordStorageOnDisk.read("someType", "someId"));
+	}
+
+	@Test
+	public void testCreateIsPassedOnToOnDiskStorage() throws Exception {
+		DataGroup someDataGroup = DataGroup.withNameInData("someNameInData");
+		DataGroup someLinkList = DataGroup.withNameInData("someLinkList");
+		recordStorageMix.create("someType", "someId", someDataGroup, someLinkList,
+				"someDataDivider");
+		assertEquals(recordStorageOnDisk.type, "someType");
+		assertEquals(recordStorageOnDisk.id, "someId");
+		assertEquals(recordStorageOnDisk.record, someDataGroup);
+		assertEquals(recordStorageOnDisk.linkList, someLinkList);
+		assertEquals(recordStorageOnDisk.dataDivider, "someDataDivider");
+	}
+
+	@Test
+	public void testDeleteByTypeAndIdIsPassedOnToOnDiskStorage() throws Exception {
+		recordStorageMix.deleteByTypeAndId("someType", "someId");
+		assertEquals(recordStorageOnDisk.type, "someType");
+		assertEquals(recordStorageOnDisk.id, "someId");
+	}
+
+	@Test
+	public void testLinksExistForRecordIsPassedOnToOnDiskStorage() throws Exception {
+		boolean linksExistForRecord = recordStorageMix.linksExistForRecord("someType", "someId");
+		assertEquals(recordStorageOnDisk.type, "someType");
+		assertEquals(recordStorageOnDisk.id, "someId");
+		assertEquals(linksExistForRecord,
+				recordStorageOnDisk.linksExistForRecord("someType", "someId"));
+	}
+
+	@Test
+	public void testUpdateIsPassedOnToOnDiskStorage() throws Exception {
+		DataGroup someDataGroup = DataGroup.withNameInData("someNameInData");
+		DataGroup someLinkList = DataGroup.withNameInData("someLinkList");
+		recordStorageMix.update("someType", "someId", someDataGroup, someLinkList,
+				"someDataDivider");
+		assertEquals(recordStorageOnDisk.type, "someType");
+		assertEquals(recordStorageOnDisk.id, "someId");
+		assertEquals(recordStorageOnDisk.record, someDataGroup);
+		assertEquals(recordStorageOnDisk.linkList, someLinkList);
+		assertEquals(recordStorageOnDisk.dataDivider, "someDataDivider");
+	}
+
+	@Test
+	public void testReadListIsPassedOnToOnDiskStorage() throws Exception {
+		Collection<DataGroup> readList = recordStorageMix.readList("someType");
+		assertEquals(recordStorageOnDisk.type, "someType");
+		assertEquals(readList, recordStorageOnDisk.readList("someType"));
+	}
+
+	@Test
+	public void testReadAbstractListIsPassedOnToOnDiskStorage() throws Exception {
+		Collection<DataGroup> readList = recordStorageMix.readAbstractList("someType");
+		assertEquals(recordStorageOnDisk.type, "someType");
+		assertEquals(readList, recordStorageOnDisk.readAbstractList("someType"));
+	}
+
+	@Test
+	public void testReadLinkListIsPassedOnToOnDiskStorage() throws Exception {
+		DataGroup readLinkList = recordStorageMix.readLinkList("someType", "someId");
+		assertEquals(recordStorageOnDisk.type, "someType");
+		assertEquals(recordStorageOnDisk.id, "someId");
+		assertEquals(readLinkList, recordStorageOnDisk.readLinkList("someType", "someId"));
+	}
+
+	@Test
+	public void testGenerateLinkCollectionPointingToRecordIsPassedOnToOnDiskStorage()
+			throws Exception {
+		Collection<DataGroup> generatedLinks = recordStorageMix
+				.generateLinkCollectionPointingToRecord("someType", "someId");
+		assertEquals(recordStorageOnDisk.type, "someType");
+		assertEquals(recordStorageOnDisk.id, "someId");
+		assertEquals(generatedLinks,
+				recordStorageOnDisk.generateLinkCollectionPointingToRecord("someType", "someId"));
+	}
+
+	@Test
+	public void testRecordsExistForRecordTypeIsPassedOnToOnDiskStorage() throws Exception {
+		boolean recordsExist = recordStorageMix.recordsExistForRecordType("someType");
+		assertEquals(recordStorageOnDisk.type, "someType");
+		assertEquals(recordsExist, recordStorageOnDisk.recordsExistForRecordType("someType"));
+	}
+
+	@Test
+	public void testRecordsExistForAbstractOrImplementingRecordTypeIsPassedOnToOnDiskStorage()
+			throws Exception {
+		boolean recordsExist = recordStorageMix
+				.recordExistsForAbstractOrImplementingRecordTypeAndRecordId("someType", "someId");
+		assertEquals(recordStorageOnDisk.type, "someType");
+		assertEquals(recordStorageOnDisk.id, "someId");
+		assertEquals(recordsExist, recordStorageOnDisk
+				.recordExistsForAbstractOrImplementingRecordTypeAndRecordId("someType", "someId"));
 	}
 }

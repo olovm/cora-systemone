@@ -154,9 +154,26 @@ public class SystemTwoDependencyProvider extends SpiderDependencyProvider {
 		// .getMethod("createRecordStorageInDatabaseUsingConnectionProvider", cArg);
 
 		InitialContext context = new InitialContext();
-		SqlConnectionProvider postgresConnectionProvider = ContextConnectionProviderImp
+		SqlConnectionProvider sqlConnectionProvider = ContextConnectionProviderImp
 				.usingInitialContextAndName(context, databaseLookupName);
-		return RecordStorageInDatabase.usingSqlConnectionProvider(postgresConnectionProvider);
+
+		// trams test
+		// try {
+		// Connection con = sqlConnectionProvider.getConnection();
+		// PreparedStatement prepareStatement = con.prepareStatement("select * from
+		// trying;");
+		// ResultSet resultSet = prepareStatement.executeQuery();
+		// while (resultSet.next()) {
+		// String id = resultSet.getString("id");
+		// String stuff = resultSet.getString("stuff");
+		// String x = "";
+		// x += "1";
+		// }
+		// } catch (SQLException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		return RecordStorageInDatabase.usingSqlConnectionProvider(sqlConnectionProvider);
 		// return (RecordStorage) constructor.invoke(null, postgresConnectionProvider);
 
 		// InitialContext context;
