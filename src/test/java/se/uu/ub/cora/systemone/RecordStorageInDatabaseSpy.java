@@ -28,8 +28,8 @@ public class RecordStorageInDatabaseSpy implements RecordStorage, MetadataStorag
 	}
 
 	@Override
-	public void create(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void create(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
 		// TODO Auto-generated method stub
 
 	}
@@ -47,20 +47,20 @@ public class RecordStorageInDatabaseSpy implements RecordStorage, MetadataStorag
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void update(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String type) {
+	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -135,5 +135,4 @@ public class RecordStorageInDatabaseSpy implements RecordStorage, MetadataStorag
 	public SqlConnectionProvider getConnectionProvider() {
 		return connectionProvider;
 	}
-
 }

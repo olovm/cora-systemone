@@ -48,9 +48,9 @@ public class RecordStorageInMix implements RecordStorage {
 	}
 
 	@Override
-	public void create(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
-		recordStorageOnDisk.create(type, id, record, linkList, dataDivider);
+	public void create(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
+		recordStorageOnDisk.create(type, id, record, collectedTerms, linkList, dataDivider);
 	}
 
 	@Override
@@ -64,20 +64,21 @@ public class RecordStorageInMix implements RecordStorage {
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
-		recordStorageOnDisk.update(type, id, record, linkList, dataDivider);
-		recordStorageInDatabase.update(type, id, record, linkList, dataDivider);
+	public void update(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
+		recordStorageOnDisk.update(type, id, record, collectedTerms, linkList, dataDivider);
+		recordStorageInDatabase.update(type, id, record, collectedTerms, linkList, dataDivider);
+
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
-		return recordStorageOnDisk.readList(type);
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
+		return recordStorageOnDisk.readList(type, filter);
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String type) {
-		return recordStorageOnDisk.readAbstractList(type);
+	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
+		return recordStorageOnDisk.readAbstractList(type, filter);
 	}
 
 	@Override

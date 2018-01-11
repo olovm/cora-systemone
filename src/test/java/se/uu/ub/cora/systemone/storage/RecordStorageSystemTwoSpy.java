@@ -27,14 +27,13 @@ public class RecordStorageSystemTwoSpy implements RecordStorage {
 	}
 
 	@Override
-	public void create(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void create(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
 		this.type = type;
 		this.id = id;
 		this.record = record;
 		this.linkList = linkList;
 		this.dataDivider = dataDivider;
-
 	}
 
 	@Override
@@ -53,8 +52,8 @@ public class RecordStorageSystemTwoSpy implements RecordStorage {
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void update(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
 		this.type = type;
 		this.id = id;
 		this.record = record;
@@ -63,13 +62,13 @@ public class RecordStorageSystemTwoSpy implements RecordStorage {
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
 		this.type = type;
 		return someRecordList;
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String type) {
+	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
 		this.type = type;
 		return someRecordList;
 	}

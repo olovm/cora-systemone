@@ -66,7 +66,18 @@ public class RecordStorageInMixTest {
 	public void testCreateIsPassedOnToOnDiskStorage() throws Exception {
 		DataGroup someDataGroup = DataGroup.withNameInData("someNameInData");
 		DataGroup someLinkList = DataGroup.withNameInData("someLinkList");
-		recordStorageMix.create("someType", "someId", someDataGroup, someLinkList,
+
+		DataGroup collectedData = DataCreator.createCollectedDataWithTypeAndId("place",
+				"place:0001");
+		DataGroup collectStorageTerm = DataGroup.withNameInData("storage");
+		collectedData.addChild(collectStorageTerm);
+
+		// DataGroup collectedDataTerm = DataCreator
+		// .createStorageTermWithRepeatIdAndTermIdAndTermValueAndStorageKey("1",
+		// "placeNameStorageTerm", "Uppsala", "placeName");
+		// collectStorageTerm.addChild(collectedDataTerm);
+
+		recordStorageMix.create("someType", "someId", someDataGroup, collectedData, someLinkList,
 				"someDataDivider");
 		assertEquals(recordStorageOnDisk.type, "someType");
 		assertEquals(recordStorageOnDisk.id, "someId");
@@ -95,7 +106,18 @@ public class RecordStorageInMixTest {
 	public void testUpdateIsPassedOnToOnDiskStorage() throws Exception {
 		DataGroup someDataGroup = DataGroup.withNameInData("someNameInData");
 		DataGroup someLinkList = DataGroup.withNameInData("someLinkList");
-		recordStorageMix.update("someType", "someId", someDataGroup, someLinkList,
+
+		DataGroup collectedData = DataCreator.createCollectedDataWithTypeAndId("place",
+				"place:0001");
+		DataGroup collectStorageTerm = DataGroup.withNameInData("storage");
+		collectedData.addChild(collectStorageTerm);
+
+		// DataGroup collectedDataTerm = DataCreator
+		// .createStorageTermWithRepeatIdAndTermIdAndTermValueAndStorageKey("1",
+		// "placeNameStorageTerm", "Uppsala", "placeName");
+		// collectStorageTerm.addChild(collectedDataTerm);
+
+		recordStorageMix.update("someType", "someId", someDataGroup, collectedData, someLinkList,
 				"someDataDivider");
 		assertEquals(recordStorageOnDisk.type, "someType");
 		assertEquals(recordStorageOnDisk.id, "someId");
@@ -106,16 +128,26 @@ public class RecordStorageInMixTest {
 
 	@Test
 	public void testReadListIsPassedOnToOnDiskStorage() throws Exception {
-		Collection<DataGroup> readList = recordStorageMix.readList("someType");
+		DataGroup filter = DataCreator.createEmptyFilter();
+		// DataGroup part = DataCreator.createFilterPartWithRepeatIdAndKeyAndValue("0",
+		// "placeName",
+		// "Uppsala");
+		// filter.addChild(part);
+		Collection<DataGroup> readList = recordStorageMix.readList("someType", filter);
 		assertEquals(recordStorageOnDisk.type, "someType");
-		assertEquals(readList, recordStorageOnDisk.readList("someType"));
+		assertEquals(readList, recordStorageOnDisk.readList("someType", filter));
 	}
 
 	@Test
 	public void testReadAbstractListIsPassedOnToOnDiskStorage() throws Exception {
-		Collection<DataGroup> readList = recordStorageMix.readAbstractList("someType");
+		DataGroup filter = DataCreator.createEmptyFilter();
+		// DataGroup part = DataCreator.createFilterPartWithRepeatIdAndKeyAndValue("0",
+		// "placeName",
+		// "Uppsala");
+		// filter.addChild(part);
+		Collection<DataGroup> readList = recordStorageMix.readAbstractList("someType", filter);
 		assertEquals(recordStorageOnDisk.type, "someType");
-		assertEquals(readList, recordStorageOnDisk.readAbstractList("someType"));
+		assertEquals(readList, recordStorageOnDisk.readAbstractList("someType", filter));
 	}
 
 	@Test
